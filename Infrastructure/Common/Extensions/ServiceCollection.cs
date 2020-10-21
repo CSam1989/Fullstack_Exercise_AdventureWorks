@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Identity;
+using Application.Common.Interfaces.Persistance;
+using Infrastructure.Common.Services;
 using Infrastructure.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +21,9 @@ namespace Infrastructure.Common.Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<ILoginService, LoginService>();
+            services.AddTransient<IRoleService, RoleService>();
+
             services.AddTransient<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddDbContext<AppDbContext>(opt => opt
                 .UseSqlServer(
@@ -24,6 +32,9 @@ namespace Infrastructure.Common.Extensions
                     {
                         sqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
                     }));
+
+            // Hier nogmaals toevoegen voor de Mediator/CQRS van Identity
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
@@ -43,8 +54,11 @@ namespace Infrastructure.Common.Extensions
 
             services.AddAuthentication(opt =>
                 {
-                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultAuthenticateScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
                 {
@@ -52,7 +66,7 @@ namespace Infrastructure.Common.Extensions
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                            .GetBytes(configuration.GetSection("AppSettings:Token").Value)),
+                            .GetBytes(configuration.GetSection("Token").Value)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
