@@ -2,11 +2,13 @@
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence
 {
-    public partial class AppDbContext : DbContext, IAppDbContext
+    public partial class AppDbContext : IdentityDbContext<IdentityUser>, IAppDbContext
     {
         public AppDbContext()
         {
@@ -25,16 +27,7 @@ namespace Infrastructure.Persistence
         {
             return await base.SaveChangesAsync(cancellationToken);
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.;Database=AdventureWorks2017;Trusted_Connection=True;");
-            }
-        }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>(entity =>
@@ -309,6 +302,7 @@ namespace Infrastructure.Persistence
             });
 
             OnModelCreatingPartial(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
