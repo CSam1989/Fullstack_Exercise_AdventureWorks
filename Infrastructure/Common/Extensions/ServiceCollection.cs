@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Application.Common.Interfaces;
+using Infrastructure.Common.Services;
 using Infrastructure.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +19,8 @@ namespace Infrastructure.Common.Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<IIdentityService, IdentityService>();
+
             services.AddTransient<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddDbContext<AppDbContext>(opt => opt
                 .UseSqlServer(
@@ -24,6 +29,9 @@ namespace Infrastructure.Common.Extensions
                     {
                         sqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
                     }));
+
+            // Hier nogmaals toevoegen voor de Mediator/CQRS van Identity
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
