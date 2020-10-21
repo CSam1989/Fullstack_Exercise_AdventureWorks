@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Identity;
+using Application.Common.Interfaces.Persistance;
 using Infrastructure.Common.Services;
 using Infrastructure.Persistence;
 using MediatR;
@@ -19,7 +21,8 @@ namespace Infrastructure.Common.Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<ILoginService, LoginService>();
+            services.AddTransient<IRoleService, RoleService>();
 
             services.AddTransient<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddDbContext<AppDbContext>(opt => opt
