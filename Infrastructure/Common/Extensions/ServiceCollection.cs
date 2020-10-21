@@ -43,8 +43,11 @@ namespace Infrastructure.Common.Extensions
 
             services.AddAuthentication(opt =>
                 {
-                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultAuthenticateScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
                 {
@@ -52,7 +55,7 @@ namespace Infrastructure.Common.Extensions
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                            .GetBytes(configuration.GetSection("AppSettings:Token").Value)),
+                            .GetBytes(configuration.GetSection("Token").Value)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
