@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,12 +14,12 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Common.Services
 {
-    public class IdentityService : IIdentityService
+    public class LoginService : ILoginService
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public IdentityService(UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public LoginService(UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Application.Common.Interfaces
+namespace Application.Common.Interfaces.Identity
 {
-    public interface IIdentityService
+    public interface ILoginService
     {
         Task<string> LoginAndGetToken(string username);
     }

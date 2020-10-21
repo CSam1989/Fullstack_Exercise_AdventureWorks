@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Common.Interfaces
+namespace Application.Common.Interfaces.Persistance
 {
     public interface IAppDbContext
     {
