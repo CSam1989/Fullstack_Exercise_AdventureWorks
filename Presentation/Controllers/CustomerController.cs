@@ -17,13 +17,17 @@ namespace Presentation.Controllers
     public class CustomerController : BaseController
     {
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<CustomerVM>> Get()
         {
-            return await Mediator.Send(new GetCustomerQuery());
+            return  Ok(await Mediator.Send(new GetCustomerQuery()));
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update(int id, UpdateCustomerCommand command)
         {
             if (id != command.CustomerId)
