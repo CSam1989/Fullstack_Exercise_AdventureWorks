@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -17,16 +18,16 @@ namespace Infrastructure.Identity.Queries.Login
 
         public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
         {
-            private readonly IIdentityService _identityService;
+            private readonly ILoginService _loginService;
             private readonly SignInManager<IdentityUser> _signInManager;
 
             public LoginQueryHandler(
                 SignInManager<IdentityUser> signInManager,
-                IIdentityService identityService
+                ILoginService loginService
             )
             {
                 _signInManager = signInManager;
-                _identityService = identityService;
+                _loginService = loginService;
             }
 
             public async Task<string> Handle(LoginQuery request, CancellationToken cancellationToken)
@@ -37,7 +38,7 @@ namespace Infrastructure.Identity.Queries.Login
                 if (!result.Succeeded)
                     throw new UnauthorizedException("Username and/or Password are not correct!");
 
-                return await _identityService.LoginAndGetToken(request.Username);
+                return await _loginService.LoginAndGetToken(request.Username);
             }
         }
     }

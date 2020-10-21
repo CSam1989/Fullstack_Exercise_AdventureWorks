@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Persistance;
 using Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
