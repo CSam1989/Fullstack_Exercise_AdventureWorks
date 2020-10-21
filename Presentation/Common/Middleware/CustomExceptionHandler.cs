@@ -46,6 +46,12 @@ namespace Presentation.Common.Middleware
                 case UnauthorizedException _:
                     code = HttpStatusCode.Unauthorized;
                     break;
+                case NotFoundException _:
+                    code = HttpStatusCode.NotFound;
+                    break;
+                case BadRequestException _:
+                    code = HttpStatusCode.BadRequest;
+                    break;
             }
 
             context.Response.ContentType = "application/json";
