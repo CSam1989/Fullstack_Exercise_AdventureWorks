@@ -3,6 +3,7 @@ using Application.Common.Extensions;
 using Application.Common.Interfaces;
 using FluentValidation.AspNetCore;
 using Infrastructure.Common.Extensions;
+using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Presentation.Common.Middleware;
 
 namespace Presentation
 {
@@ -30,6 +32,7 @@ namespace Presentation
                 .AddFluentValidation(fv =>
                 {
                     fv.RegisterValidatorsFromAssemblyContaining<IAppDbContext>();
+                    fv.RegisterValidatorsFromAssemblyContaining<IdentityService>();
                 });
 
             services
@@ -98,6 +101,8 @@ namespace Presentation
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseCustomExceptionHandler();
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
