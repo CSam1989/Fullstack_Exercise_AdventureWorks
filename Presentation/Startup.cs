@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Application.Common.Extensions;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Persistance;
 using FluentValidation.AspNetCore;
 using Infrastructure.Common.Extensions;
 using Infrastructure.Common.Services;
@@ -32,7 +33,7 @@ namespace Presentation
                 .AddFluentValidation(fv =>
                 {
                     fv.RegisterValidatorsFromAssemblyContaining<IAppDbContext>();
-                    fv.RegisterValidatorsFromAssemblyContaining<IdentityService>();
+                    fv.RegisterValidatorsFromAssemblyContaining<LoginService>();
                 });
 
             services
