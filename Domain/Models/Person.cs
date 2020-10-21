@@ -7,7 +7,7 @@ namespace Domain.Models
     {
         public Person()
         {
-            Customer = new HashSet<Customer>();
+            Customers = new HashSet<Customer>();
         }
 
         public int BusinessEntityId { get; set; }
@@ -24,6 +24,6 @@ namespace Domain.Models
         public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
 
-        public virtual ICollection<Customer> Customer { get; set; }
+        public virtual ICollection<Customer> Customers { get; set; }
     }
 }

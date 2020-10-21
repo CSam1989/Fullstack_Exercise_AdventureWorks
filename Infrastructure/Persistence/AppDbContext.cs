@@ -80,7 +80,7 @@ namespace Infrastructure.Persistence
                     .HasComment("ID of the territory in which the customer is located. Foreign key to SalesTerritory.SalesTerritoryID.");
 
                 entity.HasOne(d => d.Person)
-                    .WithMany(p => p.Customer)
+                    .WithMany(p => p.Customers)
                     .HasForeignKey(d => d.PersonId);
             });
 
