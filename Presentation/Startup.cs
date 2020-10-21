@@ -1,3 +1,4 @@
+using Infrastructure.Common.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,8 @@ namespace Presentation
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddInfrastructure(Configuration);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
