@@ -2,7 +2,7 @@ import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 
 import rootReducer from "./reducers/Root.reducer";
-import { ApplicationState } from "./types/States.types";
+import { ApplicationState } from "./types/State";
 
 export default function configureStore(initialState?: ApplicationState) {
   const middleware = [thunk];
