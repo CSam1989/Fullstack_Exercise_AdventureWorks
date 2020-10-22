@@ -1,4 +1,5 @@
-import { Router } from "@material-ui/icons";
+import { Container, CssBaseline } from "@material-ui/core";
+import { BrowserRouter as Router } from "react-router-dom";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -12,8 +13,11 @@ const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
+    <CssBaseline />
     <Router>
-      <App />
+      <Container maxWidth="lg">
+        <App />
+      </Container>
     </Router>
   </Provider>,
   document.getElementById("root")

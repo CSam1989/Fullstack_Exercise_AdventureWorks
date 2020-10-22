@@ -1,11 +1,21 @@
 import { Button, Menu, MenuItem } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
+import { logout } from "../../../redux/actions/Auth.actions";
+import { ApplicationState } from "../../../redux/types/State";
 
 const AuthMenu = () => {
+  const { user } = useSelector((state: ApplicationState) => state.auth);
+  const dispatch = useDispatch();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  const handleLogout = () => {
+    dispatch(logout());
+    handleClose();
+  };
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -16,26 +26,33 @@ const AuthMenu = () => {
 
   return (
     <>
-      <Button component={RouterLink} to="/login" color="inherit">
-        Login
-      </Button>
-      <Button onClick={handleClick}>
-        Hello User <ArrowDropDownIcon />
-      </Button>
+      {user ? (
+        <Button onClick={handleClick}>
+          Hello {user.unique_name || "User"} <ArrowDropDownIcon />
+        </Button>
+      ) : (
+        <Button component={RouterLink} to="/login" color="inherit">
+          Login
+        </Button>
+      )}
+
       <Menu
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem
-          component={RouterLink}
-          to="/admin/users"
-          onClick={handleClose}
-        >
-          Users
-        </MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        {user && user.role === "Admin" ? (
+          <MenuItem
+            component={RouterLink}
+            to="/admin/users"
+            onClick={handleClose}
+          >
+            Users
+          </MenuItem>
+        ) : null}
+
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </>
   );

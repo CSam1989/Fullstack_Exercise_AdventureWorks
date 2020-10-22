@@ -27,7 +27,7 @@ namespace Presentation.Controllers
             return Ok(await Mediator.Send(new GetListUsersQuery()));
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -41,7 +41,7 @@ namespace Presentation.Controllers
             });
         }
 
-        [HttpPost("create")]
+        [HttpPost("Create")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -54,7 +54,7 @@ namespace Presentation.Controllers
             return NoContent();
         }
 
-        [HttpPut("updaterole")]
+        [HttpPut("UpdateRole")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
