@@ -35,7 +35,7 @@ const LoginForm = ({
         <form onSubmit={handleSubmit} className="login-form">
           <div>
             {error && (
-              <div className="alert alert-danger" role="alert">
+              <div className="alert-danger" role="alert">
                 {error}
               </div>
             )}

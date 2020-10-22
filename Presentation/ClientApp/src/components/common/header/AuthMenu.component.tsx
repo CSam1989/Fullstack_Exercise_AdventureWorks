@@ -2,11 +2,15 @@ import { Button, Menu, MenuItem } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
+import {
+  Link as RouterLink,
+  RouteComponentProps,
+  withRouter,
+} from "react-router-dom";
 import { logout } from "../../../redux/actions/Auth.actions";
 import { ApplicationState } from "../../../redux/types/State";
 
-const AuthMenu = () => {
+const AuthMenu = (props: RouteComponentProps<any>) => {
   const { user } = useSelector((state: ApplicationState) => state.auth);
   const dispatch = useDispatch();
 
@@ -15,6 +19,7 @@ const AuthMenu = () => {
   const handleLogout = () => {
     dispatch(logout());
     handleClose();
+    props.history.push("/");
   };
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -58,4 +63,4 @@ const AuthMenu = () => {
   );
 };
 
-export default AuthMenu;
+export default withRouter(AuthMenu);

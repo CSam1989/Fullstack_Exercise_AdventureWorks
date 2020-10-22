@@ -1,6 +1,9 @@
+import "react-toastify/dist/ReactToastify.css";
+
 import { Container } from "@material-ui/core";
 import * as React from "react";
 import { Route } from "react-router";
+import { ToastContainer } from "react-toastify";
 
 import NavMenu from "./common/header/NavMenu.component";
 import CustomerPage from "./pages/customer/Customer.page";
@@ -17,5 +20,6 @@ export default () => (
       <Route path="/login" component={LoginPage} />
       <Route path="/admin/users" component={UserPage} />
     </Container>
+    <ToastContainer autoClose={3000} hideProgressBar position="bottom-right" />
   </>
 );
