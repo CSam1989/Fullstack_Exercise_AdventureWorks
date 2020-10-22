@@ -1,0 +1,23 @@
+.inputfield,
+.login-form {
+  width: 100%;
+}
+
+@media all and (min-width: 768px) {
+  /* start here with own css, for medium screensizes (tablets)*/
+  .login-form {
+    width: 75%;
+  }
+}
+
+@media all and (min-width: 1024px) {
+  /* start here with own css, for large screensizes (pc)*/
+  .login-form {
+    width: 50%;
+  }
+
+  .inputfield::after {
+    content: "\a";
+    white-space: pre;
+  }
+}
