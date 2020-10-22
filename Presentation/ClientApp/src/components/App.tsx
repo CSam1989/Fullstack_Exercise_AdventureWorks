@@ -7,9 +7,11 @@ import LoginPage from "./pages/login/Login.page";
 import NavMenu from "./common/header/NavMenu.component";
 import { Container } from "@material-ui/core";
 import UserPage from "./pages/users/User.page";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 export default () => (
   <>
+    <CssBaseline />
     <NavMenu />
     <Container maxWidth="lg">
       <Route exact path="/" component={Home} />
