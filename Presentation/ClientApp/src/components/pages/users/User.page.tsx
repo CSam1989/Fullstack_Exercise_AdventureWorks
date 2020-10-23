@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 import { Redirect } from "react-router";
 
 const UserPage = () => {
-  const { user } = useSelector((state: ApplicationState) => state.auth);
+  const { isLoggedIn, user } = useSelector(
+    (state: ApplicationState) => state.auth
+  );
+
+  if (!isLoggedIn) return <Redirect to="/login" />;
 
   if (user === null || user.role !== "Admin") {
     toast.error("Not Authorized", { autoClose: false });

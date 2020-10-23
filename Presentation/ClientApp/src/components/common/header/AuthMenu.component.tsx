@@ -32,7 +32,7 @@ const AuthMenu = (props: RouteComponentProps<any>) => {
   return (
     <>
       {user ? (
-        <Button onClick={handleClick}>
+        <Button onClick={handleClick} color="inherit">
           Hello {user.unique_name || "User"} <ArrowDropDownIcon />
         </Button>
       ) : (
