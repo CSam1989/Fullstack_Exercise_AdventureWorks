@@ -33,6 +33,7 @@ namespace Application.Customers.Queries.Get
                         .Include(c => c.Person)
                         .Include(c => c.SalesOrderHeader)
                         .Where(c => !string.IsNullOrEmpty(c.Person.FirstName) && !string.IsNullOrEmpty(c.Person.LastName))
+                        .Skip(0).Take(50)
                         .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
                         .ToListAsync(cancellationToken)
                 };

@@ -19,7 +19,6 @@ namespace Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [AllowAnonymous]
         public async Task<ActionResult<CustomerVM>> Get()
         {
             return  Ok(await Mediator.Send(new GetCustomerQuery()));
