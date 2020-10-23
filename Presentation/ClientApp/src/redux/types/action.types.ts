@@ -1,5 +1,7 @@
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGOUT = "LOGOUT";
 
+export const GET_CUSTOMERS_SUCCESS = "GET_CUSTOMERS_SUCCESS";
+
 export const BEGIN_API_CALL = "BEGIN_API_CALL";
 export const API_CALL_ERROR = "API_CALL_ERROR";
