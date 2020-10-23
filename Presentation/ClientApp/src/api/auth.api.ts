@@ -1,7 +1,7 @@
 import { ILogin } from "./../interfaces/Login";
 import { AxiosResponse } from "axios";
 import { IUser } from "../interfaces/User";
-import http from "./api.instance";
+import http from "./helpers/api.instance";
 
 const login = async ({ username, password }: ILogin) => {
   const response: AxiosResponse<IUser> = await http.post("Auth/login", {

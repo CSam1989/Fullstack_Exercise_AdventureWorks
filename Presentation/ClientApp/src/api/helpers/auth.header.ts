@@ -1,15 +1,16 @@
 import { AxiosInstance } from "axios";
+import http from "./api.instance";
 
-export const setAuthToken = (instance: AxiosInstance) => {
+export const getHttpWithToken = () => {
   const token = getToken();
   if (token) {
     //applying token
-    instance.defaults.headers.common["Authorization"] = token;
+    http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
     //deleting the token from header
-    delete instance.defaults.headers.common["Authorization"];
+    delete http.defaults.headers.common["Authorization"];
   }
-  return instance;
+  return http;
 };
 
 const getToken = (): string | undefined => {
