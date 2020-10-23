@@ -20,9 +20,13 @@ namespace Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CustomerVM>> Get([FromQuery] PaginationDto paginationDetails)
+        public async Task<ActionResult<CustomerVM>> Get([FromQuery] CustomerFilterDto customerFilterDetails, [FromQuery] PaginationDto paginationDetails)
         {
-            return  Ok(await Mediator.Send(new GetCustomerQuery() { PageNumber = paginationDetails.PageNumber, PageSize = paginationDetails.PageSize}));
+            return Ok(await Mediator.Send(new GetCustomerQuery()
+            {
+                Pagination = paginationDetails,
+                Filter = customerFilterDetails
+            }));
         }
 
         [Authorize(Roles = "Admin")]

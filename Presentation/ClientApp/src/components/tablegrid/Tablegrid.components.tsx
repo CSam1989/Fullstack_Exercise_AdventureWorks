@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { PagingState, CustomPaging } from "@devexpress/dx-react-grid";
+import {
+  PagingState,
+  CustomPaging,
+  FilteringState,
+  IntegratedFiltering,
+} from "@devexpress/dx-react-grid";
 import {
   Grid,
   Table,
   TableHeaderRow,
+  TableFilterRow,
   PagingPanel,
 } from "@devexpress/dx-react-grid-material-ui";
 import { CurrencyTypeProvider } from "./CurrencyType.provider";
@@ -37,6 +43,8 @@ const Tablegrid = ({
         {currencyColumns ? (
           <CurrencyTypeProvider for={currencyColumns} />
         ) : null}
+        <FilteringState defaultFilters={[]} />
+        <IntegratedFiltering />
         <PagingState
           currentPage={pagination.pageNumber - 1}
           onCurrentPageChange={onPagingchange}
@@ -50,6 +58,7 @@ const Tablegrid = ({
           }
         />
         <TableHeaderRow />
+        <TableFilterRow />
         <PagingPanel pageSizes={pageSizes} />
       </Grid>
     </div>

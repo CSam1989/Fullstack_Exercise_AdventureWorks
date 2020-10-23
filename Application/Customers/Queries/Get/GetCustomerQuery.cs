@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Extensions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Persistance;
 using Application.Common.Interfaces.Services;
@@ -16,8 +17,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Customers.Queries.Get
 {
-    public class GetCustomerQuery:PaginationDto, IRequest<CustomerVM>
+    public class GetCustomerQuery: IRequest<CustomerVM>
     {
+        public PaginationDto Pagination { get; set; }
+        public CustomerFilterDto Filter { get; set; }
+
         public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, CustomerVM>
         {
             private readonly IAppDbContext _context;
@@ -34,31 +38,33 @@ namespace Application.Customers.Queries.Get
                 _mapper = mapper;
                 this._pagination = pagination;
             }
+
             public async Task<CustomerVM> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
             {
                 var customerQuery = _context.Customer
+                    .Include(c => c.Person)
+                    .Include(c => c.SalesOrderHeader)
                     .Where(c => !string.IsNullOrEmpty(c.Person.FirstName) && !string.IsNullOrEmpty(c.Person.LastName))
+                    .CustomFilter(request.Filter)
                     .AsQueryable();
 
-                await getPaginationDetails(customerQuery, request.PageNumber, request.PageSize);
+                await GetPaginationDetails(customerQuery, request.Pagination.PageNumber, request.Pagination.PageSize);
 
                 return new CustomerVM
                 {
                     List = await paginatedCustomerQuery
-                        .Include(c => c.Person)
-                        .Include(c => c.SalesOrderHeader)
                         .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
                         .ToListAsync(cancellationToken),
                     Pagination = new PaginationToReturnDto
                     {
                         PageNumber = currentPage,
-                        PageSize = request.PageSize,
+                        PageSize = request.Pagination.PageSize,
                         TotalCount = totalCount
                     }
                 };
             }
 
-            private async Task getPaginationDetails(IQueryable<Customer> query, int pageNumber, int pageSize)
+            private async Task GetPaginationDetails(IQueryable<Customer> query, int pageNumber, int pageSize)
             {
                 totalCount = await _pagination.GetTotalItemsCount(query);
                 currentPage = _pagination.GetPageNumberAndNotExceedTotaLPages(pageNumber, pageSize, totalCount);
