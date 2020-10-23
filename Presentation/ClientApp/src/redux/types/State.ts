@@ -1,3 +1,4 @@
+import { IPagination } from "./../../interfaces/Pagination";
 import { ICustomer } from "./../../interfaces/Customer";
 import { IUser } from "../../interfaces/User";
 
@@ -13,8 +14,13 @@ export interface UserState {
 }
 
 export interface CustomerState {
-  customers: ICustomer[];
+  customers: CustomerList;
   filter: "";
+}
+
+export interface CustomerList {
+  list: ICustomer[];
+  pagination: IPagination;
 }
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are

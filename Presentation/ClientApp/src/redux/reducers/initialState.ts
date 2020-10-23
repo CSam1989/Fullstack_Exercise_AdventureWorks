@@ -1,7 +1,6 @@
-import { CustomerState } from "./../types/State";
 import { decodeUserToken } from "../../api/helpers/token.decoder";
-import { IUser } from "../../interfaces/User";
 import { ApplicationState, UserState } from "../types/State";
+import { CustomerState } from "./../types/State";
 
 const userLocalStorage = localStorage.getItem("user");
 const initialUserState: UserState = userLocalStorage
@@ -12,7 +11,14 @@ const initialUserState: UserState = userLocalStorage
   : { isLoggedIn: false, user: null };
 
 const initialCustomerState: CustomerState = {
-  customers: [],
+  customers: {
+    list: [],
+    pagination: {
+      pageNumber: 0,
+      pageSize: 0,
+      totalCount: 0,
+    },
+  },
   filter: "",
 };
 

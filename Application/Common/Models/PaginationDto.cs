@@ -6,7 +6,7 @@ namespace Application.Common.Models
 {
     public class PaginationDto
     {
-        const int maxPageSize = 100;
+        const int maxPageSize = 250;
         public int PageNumber { get; set; } = 1;
 
         private int _pageSize = 50;

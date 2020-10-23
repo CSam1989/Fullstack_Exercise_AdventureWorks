@@ -1,13 +1,17 @@
-import { getHttpWithToken } from "./helpers/auth.header";
-import { ICustomer } from "./../interfaces/Customer";
 import { AxiosResponse } from "axios";
 
-interface CustomerResponse {
-  list: ICustomer[];
-}
-export const getCustomers = async () => {
-  const http = getHttpWithToken();
-  const response: AxiosResponse<CustomerResponse> = await http.get("Customer");
+import { CustomerList } from "./../redux/types/State";
+import { getHttpWithToken } from "./helpers/auth.header";
+import { getPaginatedQueryParameters } from "./helpers/queryParams.helper";
 
-  return response.data.list;
+const Url = "Customer";
+
+export const getCustomers = async (pageNumber?: number, pageSize?: number) => {
+  const http = getHttpWithToken();
+
+  const response: AxiosResponse<CustomerList> = await http.get(
+    Url + getPaginatedQueryParameters(pageNumber, pageSize)
+  );
+
+  return response.data;
 };

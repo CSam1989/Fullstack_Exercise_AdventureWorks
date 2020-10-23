@@ -17,19 +17,31 @@ const CustomerPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (customers.length === 0) dispatch(getCustomersAction());
+    if (customers.list.length === 0) dispatch(getCustomersAction());
   }, [customers]);
 
   if (!isLoggedIn) return <Redirect to="/login" />;
+
+  const handlePageChange = (pageNumber: number) => {
+    dispatch(getCustomersAction(pageNumber + 1, customers.pagination.pageSize));
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    console.log(pageSize);
+    dispatch(getCustomersAction(customers.pagination.pageNumber, pageSize));
+  };
 
   return (
     <>
       <h2>Customers</h2>
       <Tablegrid
         columns={customerColumns}
-        rows={customers}
+        rows={customers.list}
         tableColumnExtensions={tableColumnExtensions}
         currencyColumns={currencyColumns}
+        pagination={customers.pagination}
+        onPagingchange={handlePageChange}
+        onPageSizechange={handlePageSizeChange}
       />
     </>
   );
