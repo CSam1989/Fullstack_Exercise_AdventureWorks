@@ -32,7 +32,7 @@ const LoginPage = (props: RouteComponentProps<any>) => {
 
   return (
     <>
-      <h1>Login</h1>
+      <h1 className="title">Login</h1>
       <LoginForm
         handleSubmit={handleLogin}
         error={error}

@@ -1,3 +1,13 @@
 .table-grid {
   margin-bottom: 5vh;
 }
+
+thead {
+  tr {
+    th {
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}

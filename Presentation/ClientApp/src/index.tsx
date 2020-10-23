@@ -4,6 +4,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
+import "./index.styles.scss";
+
 import App from "./components/App";
 import configureStore from "./redux/configureStore";
 import registerServiceWorker from "./registerServiceWorker";
@@ -15,9 +17,7 @@ ReactDOM.render(
   <Provider store={store}>
     <CssBaseline />
     <Router>
-      <Container maxWidth="lg">
-        <App />
-      </Container>
+      <App />
     </Router>
   </Provider>,
   document.getElementById("root")

@@ -11,10 +11,12 @@ import Home from "./pages/home/Home.page";
 import LoginPage from "./pages/login/Login.page";
 import UserPage from "./pages/users/User.page";
 
+import "./App.styles.scss";
+
 export default () => (
   <>
     <NavMenu />
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" id="container-body">
       <Route exact path="/" component={Home} />
       <Route path="/customer" component={CustomerPage} />
       <Route path="/login" component={LoginPage} />
