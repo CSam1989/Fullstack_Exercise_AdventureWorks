@@ -5,4 +5,5 @@ export interface IUser {
   email: string;
   role: string;
   error: string;
+  exp: number;
 }

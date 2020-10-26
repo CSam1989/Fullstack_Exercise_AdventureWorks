@@ -1,11 +1,12 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
+import { checkTokenExpirationMiddleWare } from "../api/helpers/token.middleware";
 
 import rootReducer from "./reducers/Root.reducer";
 import { ApplicationState } from "./types/State";
 
 export default function configureStore(initialState?: ApplicationState) {
-  const middleware = [thunk];
+  const middleware = [thunk, checkTokenExpirationMiddleWare];
 
   const enhancers = [];
   const windowIfDefined =

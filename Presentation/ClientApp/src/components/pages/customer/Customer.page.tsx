@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
 import { customerColumns } from "../../../interfaces/Customer";
 import { getCustomersAction } from "../../../redux/actions/Customer.actions";
 import { ApplicationState } from "../../../redux/types/State";
@@ -16,19 +17,26 @@ const CustomerPage = () => {
   const { customers } = useSelector((state: ApplicationState) => state.data);
   const dispatch = useDispatch();
 
+  const dispatchCustomer = (pageNumber?: number, pageSize?: number) => {
+    try {
+      dispatch(getCustomersAction(pageNumber, pageSize));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
-    if (customers.list.length === 0) dispatch(getCustomersAction());
+    if (customers.list.length === 0) dispatchCustomer();
   }, [customers]);
 
   if (!isLoggedIn) return <Redirect to="/login" />;
 
   const handlePageChange = (pageNumber: number) => {
-    dispatch(getCustomersAction(pageNumber + 1, customers.pagination.pageSize));
+    dispatchCustomer(pageNumber + 1, customers.pagination.pageSize);
   };
 
   const handlePageSizeChange = (pageSize: number) => {
-    console.log(pageSize);
-    dispatch(getCustomersAction(customers.pagination.pageNumber, pageSize));
+    dispatchCustomer(customers.pagination.pageNumber, pageSize);
   };
 
   return (

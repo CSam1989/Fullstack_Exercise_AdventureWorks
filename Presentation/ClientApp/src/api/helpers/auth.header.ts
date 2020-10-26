@@ -1,4 +1,3 @@
-import { AxiosInstance } from "axios";
 import http from "./api.instance";
 
 export const getHttpWithToken = () => {

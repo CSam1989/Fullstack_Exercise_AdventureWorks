@@ -3,6 +3,8 @@ import { AxiosResponse } from "axios";
 import { IUser } from "../interfaces/User";
 import http from "./helpers/api.instance";
 
+export const UserStorage = "user";
+
 const login = async ({ username, password }: ILogin) => {
   const response: AxiosResponse<IUser> = await http.post("Auth/login", {
     username,
@@ -15,7 +17,7 @@ const login = async ({ username, password }: ILogin) => {
 };
 
 const logout = () => {
-  localStorage.removeItem("user");
+  localStorage.removeItem(UserStorage);
 };
 
 export default {
