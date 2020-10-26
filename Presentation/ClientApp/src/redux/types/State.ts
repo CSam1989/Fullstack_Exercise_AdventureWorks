@@ -1,3 +1,4 @@
+import { CustomerApiFilterProps } from "./../../api/customer.api";
 import { IPagination } from "./../../interfaces/Pagination";
 import { ICustomer } from "./../../interfaces/Customer";
 import { IUser } from "../../interfaces/User";
@@ -15,7 +16,7 @@ export interface UserState {
 
 export interface CustomerState {
   customers: CustomerList;
-  filter: "";
+  filters: CustomerApiFilterProps;
 }
 
 export interface CustomerList {

@@ -1,3 +1,4 @@
+import { IPagination } from "./../interfaces/Pagination";
 import { AxiosResponse } from "axios";
 
 import { CustomerList } from "./../redux/types/State";
@@ -6,21 +7,23 @@ import { getCustomerFilterAndPaginatedQueryParameters } from "./helpers/queryPar
 
 const Url = "Customer";
 
-export interface CustomerApiProps {
-  pageNumber?: number;
-  pageSize?: number;
-  firstName?: string;
-  lastName?: string;
-  accountNumber?: string;
-  sales?: number;
-  mustSalesBeHigherThanSum?: boolean;
+export interface CustomerApiFilterProps {
+  firstName: string;
+  lastName: string;
+  accountNumber: string;
+  sumTotalDue: number | undefined;
+  mustSalesBeHigherThanSum: boolean | undefined;
+  [propName: string]: any;
 }
 
-export const getCustomers = async (props?: CustomerApiProps) => {
+export const getCustomers = async (
+  filterProps?: CustomerApiFilterProps,
+  paginationProps?: IPagination
+) => {
   const http = getHttpWithToken();
-
   const response: AxiosResponse<CustomerList> = await http.get(
-    Url + getCustomerFilterAndPaginatedQueryParameters(props)
+    Url +
+      getCustomerFilterAndPaginatedQueryParameters(paginationProps, filterProps)
   );
 
   return response.data;

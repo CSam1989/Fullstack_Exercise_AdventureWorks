@@ -21,8 +21,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<CustomerVM>> Get([FromQuery] CustomerFilterDto customerFilterDetails, [FromQuery] PaginationDto paginationDetails)
-        {
-            return Ok(await Mediator.Send(new GetCustomerQuery()
+        {return Ok(await Mediator.Send(new GetCustomerQuery()
             {
                 Pagination = paginationDetails,
                 Filter = customerFilterDetails

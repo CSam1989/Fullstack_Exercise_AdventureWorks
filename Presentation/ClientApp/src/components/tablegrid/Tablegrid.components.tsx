@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+import "./Tablegrid.styles.scss";
+
 import {
-  PagingState,
   CustomPaging,
+  Filter,
   FilteringState,
-  IntegratedFiltering,
+  PagingState,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
-  Table,
-  TableHeaderRow,
-  TableFilterRow,
   PagingPanel,
+  Table,
+  TableFilterRow,
+  TableHeaderRow,
 } from "@devexpress/dx-react-grid-material-ui";
-import { CurrencyTypeProvider, FilterProvider } from "./CurrencyType.provider";
+import React, { useState } from "react";
 
-import "./Tablegrid.styles.scss";
 import { IPagination } from "../../interfaces/Pagination";
+import { CurrencyTypeProvider } from "./CurrencyType.provider";
+import { FilterProvider } from "./Filter.provider";
 
 export interface TablegridProps {
   columns: any[];
@@ -25,6 +27,8 @@ export interface TablegridProps {
   pagination: IPagination;
   onPagingchange(pageNumber: number): void;
   onPageSizechange(pageSize: number): void;
+  filters: Filter[];
+  onFiltersChange(event: any): void;
 }
 
 const Tablegrid = ({
@@ -35,12 +39,15 @@ const Tablegrid = ({
   pagination,
   onPagingchange,
   onPageSizechange,
+  filters,
+  onFiltersChange,
 }: TablegridProps) => {
   const [pageSizes] = useState([50, 100, 250]);
   const [currencyFilterOperations] = useState([
     "greaterThan",
     "lessThanOrEqual",
   ]);
+
   const [otherFilterOperations] = useState([]);
   const [otherColumns] = useState(["firstName", "lastName", "accountNumber"]);
 
@@ -58,8 +65,7 @@ const Tablegrid = ({
           columns={otherColumns}
           filterOperations={otherFilterOperations}
         />
-        <FilteringState defaultFilters={[]} />
-        <IntegratedFiltering />
+        <FilteringState onFiltersChange={onFiltersChange} />
         <PagingState
           currentPage={pagination.pageNumber - 1}
           onCurrentPageChange={onPagingchange}

@@ -19,7 +19,13 @@ const initialCustomerState: CustomerState = {
       totalCount: 0,
     },
   },
-  filter: "",
+  filters: {
+    firstName: "",
+    lastName: "",
+    accountNumber: "",
+    sumTotalDue: undefined,
+    mustSalesBeHigherThanSum: false,
+  },
 };
 
 const InitialState: ApplicationState = {

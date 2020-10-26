@@ -1,12 +1,19 @@
+import { Filter } from "@devexpress/dx-react-grid";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
-import { CustomerApiProps } from "../../../api/customer.api";
+
+import { CustomerApiFilterProps } from "../../../api/customer.api";
 import { customerColumns } from "../../../interfaces/Customer";
+import { IPagination } from "../../../interfaces/Pagination";
 import { logout } from "../../../redux/actions/Auth.actions";
 import { getCustomersAction } from "../../../redux/actions/Customer.actions";
 import { ApplicationState } from "../../../redux/types/State";
+import {
+  SetGridFilterToReduxFilter,
+  SetReduxFilterToGridFilter,
+} from "../../tablegrid/Filter.provider";
 import Tablegrid from "../../tablegrid/Tablegrid.components";
 
 const CustomerPage = () => {
@@ -16,12 +23,17 @@ const CustomerPage = () => {
   const [currencyColumns] = useState(["sumTotalDue"]);
 
   const { isLoggedIn } = useSelector((state: ApplicationState) => state.auth);
-  const { customers } = useSelector((state: ApplicationState) => state.data);
+  const { customers, filters } = useSelector(
+    (state: ApplicationState) => state.data
+  );
   const dispatch = useDispatch();
 
-  const dispatchCustomer = (queryParams?: CustomerApiProps) => {
+  const dispatchCustomer = (
+    filterProps?: CustomerApiFilterProps,
+    paginationProps?: IPagination
+  ) => {
     try {
-      dispatch(getCustomersAction(queryParams));
+      dispatch(getCustomersAction(filterProps, paginationProps));
     } catch (error) {
       toast.error(error.message);
       dispatch(logout());
@@ -36,19 +48,29 @@ const CustomerPage = () => {
   if (!isLoggedIn) return <Redirect to="/login" />;
 
   const handlePageChange = (pageNumber: number) => {
-    dispatchCustomer({
+    dispatchCustomer(filters, {
+      ...customers.pagination,
       pageNumber: pageNumber + 1,
-      pageSize: customers.pagination.pageSize,
     });
   };
 
   const handlePageSizeChange = (pageSize: number) => {
-    dispatchCustomer({
-      pageNumber: customers.pagination.pageNumber,
+    dispatchCustomer(filters, {
+      ...customers.pagination,
       pageSize: pageSize,
     });
   };
 
+  const handleFilterChange = (gridFilters: Filter[]) => {
+    const newFilters = SetGridFilterToReduxFilter(
+      gridFilters,
+      filters,
+      currencyColumns
+    );
+    dispatchCustomer(filters, customers.pagination);
+  };
+
+  const gridFilter = SetReduxFilterToGridFilter(filters, currencyColumns);
   return (
     <>
       <h2>Customers</h2>
@@ -60,6 +82,8 @@ const CustomerPage = () => {
         pagination={customers.pagination}
         onPagingchange={handlePageChange}
         onPageSizechange={handlePageSizeChange}
+        filters={gridFilter}
+        onFiltersChange={handleFilterChange}
       />
     </>
   );

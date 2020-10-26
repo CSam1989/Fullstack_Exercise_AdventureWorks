@@ -1,38 +1,40 @@
-import { CustomerApiProps } from "./../customer.api";
+import { IPagination } from "./../../interfaces/Pagination";
+import { CustomerApiFilterProps } from "./../customer.api";
 export const getPaginatedQueryParameters = (
-  pageNumber?: number,
-  pageSize?: number
+  paginationProps?: IPagination
 ): string => {
   let queryParameters = "?";
-  queryParameters += pageNumber ? `pageNumber=${pageNumber}&` : null;
-  queryParameters += pageSize ? `pageSize=${pageSize}&` : null;
+
+  if (paginationProps) {
+    const { pageNumber, pageSize } = paginationProps;
+    queryParameters += pageNumber ? `pageNumber=${pageNumber}&` : "";
+    queryParameters += pageSize ? `pageSize=${pageSize}&` : "";
+  }
+
   return queryParameters;
 };
 
 export const getCustomerFilterAndPaginatedQueryParameters = (
-  queryProps?: CustomerApiProps
+  paginationProps?: IPagination,
+  filterProps?: CustomerApiFilterProps
 ): string => {
-  if (!queryProps) return "";
+  let queryParameters = getPaginatedQueryParameters(paginationProps);
 
-  let queryParameters = getPaginatedQueryParameters(
-    queryProps.pageNumber,
-    queryProps.pageSize
-  );
+  if (filterProps) {
+    const {
+      firstName,
+      lastName,
+      accountNumber,
+      sumTotalDue,
+      mustSalesBeHigherThanSum,
+    } = filterProps;
 
-  const {
-    firstName,
-    lastName,
-    accountNumber,
-    sales,
-    mustSalesBeHigherThanSum,
-  } = queryProps;
-
-  queryParameters += firstName ? `firstName=${firstName}&` : null;
-  queryParameters += lastName ? `lastName=${lastName}&` : null;
-  queryParameters += accountNumber ? `accountNumber=${accountNumber}&` : null;
-  queryParameters += sales
-    ? `sales=${sales}&mustSalesBeHigherThanSum=${mustSalesBeHigherThanSum}`
-    : null;
-
+    queryParameters += `firstName=${firstName}&`;
+    queryParameters += `lastName=${lastName}&`;
+    queryParameters += `accountNumber=${accountNumber}&`;
+    queryParameters += sumTotalDue
+      ? `sumTotalDue=${sumTotalDue}&mustSalesBeHigherThanSum=${mustSalesBeHigherThanSum}`
+      : "";
+  }
   return queryParameters;
 };

@@ -1,4 +1,5 @@
-import { CustomerApiProps } from "./../../api/customer.api";
+import { IPagination } from "./../../interfaces/Pagination";
+import { CustomerApiFilterProps } from "./../../api/customer.api";
 import { CustomerState, CustomerList } from "./../types/State";
 import { GET_CUSTOMERS_SUCCESS } from "../types/action.types";
 import { AppThunkAction } from "../types/State";
@@ -18,12 +19,13 @@ const GetCustomerSuccess = (payload: CustomerList): IGetCustomersAction => {
 };
 
 export const getCustomersAction = (
-  queryProps?: CustomerApiProps
+  filterProps?: CustomerApiFilterProps,
+  paginationProps?: IPagination
 ): AppThunkAction<CustomerActions> => {
   return async (dispatch) => {
     try {
       dispatch(beginApiCall());
-      const customers = await getCustomers(queryProps);
+      const customers = await getCustomers(filterProps, paginationProps);
       dispatch(GetCustomerSuccess(customers));
     } catch (error) {
       dispatch(apiCallError());

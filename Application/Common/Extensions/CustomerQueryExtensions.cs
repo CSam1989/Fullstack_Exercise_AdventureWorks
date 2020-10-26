@@ -26,10 +26,10 @@ namespace Application.Common.Extensions
                 ? query.Where(c => c.AccountNumber.Contains(filters.AccountNumber.Trim()))
                 : query;
 
-            query = filters.Sales.HasValue
+            query = filters.SumTotalDue.HasValue
                 ? filters.MustSalesBeHigherThanSum
-                    ? query.Where(c => c.SalesOrderHeader.Sum(s => s.TotalDue) > filters.Sales)
-                    : query.Where(c => c.SalesOrderHeader.Sum(s => s.TotalDue) <= filters.Sales)
+                    ? query.Where(c => c.SalesOrderHeader.Sum(s => s.TotalDue) > filters.SumTotalDue)
+                    : query.Where(c => c.SalesOrderHeader.Sum(s => s.TotalDue) <= filters.SumTotalDue)
                 : query;
 
             return query;
