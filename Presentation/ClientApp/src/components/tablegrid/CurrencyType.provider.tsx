@@ -1,5 +1,14 @@
 import { DataTypeProvider } from "@devexpress/dx-react-grid";
-import * as React from "react";
+import React, { useState } from "react";
+
+export const FilterProvider = (props: any) => {
+  return (
+    <DataTypeProvider
+      for={props.columns}
+      availableFilterOperations={props.filterOperations}
+    />
+  );
+};
 
 const CurrencyFormatter = ({ value }: any) => (
   <span>
