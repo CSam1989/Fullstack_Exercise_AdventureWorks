@@ -1,7 +1,9 @@
-import { IPagination } from "./../interfaces/Pagination";
 import { AxiosResponse } from "axios";
 
+import { ICustomer } from "./../interfaces/Customer";
+import { IPagination } from "./../interfaces/Pagination";
 import { CustomerList } from "./../redux/types/State";
+import { handleErrors, handleResponses } from "./helpers/api.utils";
 import { getHttpWithToken } from "./helpers/auth.header";
 import { getCustomerFilterAndPaginatedQueryParameters } from "./helpers/queryParams.helper";
 
@@ -21,10 +23,26 @@ export const getCustomers = async (
   paginationProps?: IPagination
 ) => {
   const http = getHttpWithToken();
-  const response: AxiosResponse<CustomerList> = await http.get(
-    Url +
-      getCustomerFilterAndPaginatedQueryParameters(paginationProps, filterProps)
-  );
+  try {
+    const response: AxiosResponse<CustomerList> = await http.get(
+      Url +
+        getCustomerFilterAndPaginatedQueryParameters(
+          paginationProps,
+          filterProps
+        )
+    );
+    return handleResponses(response);
+  } catch (error) {
+    return handleErrors(error);
+  }
+};
 
-  return response.data;
+export const updateCustomer = async (customer: ICustomer) => {
+  const http = getHttpWithToken();
+  try {
+    const response = await http.put(Url + `/${customer.customerId}`, customer);
+    return handleResponses(response);
+  } catch (error) {
+    handleErrors(error);
+  }
 };

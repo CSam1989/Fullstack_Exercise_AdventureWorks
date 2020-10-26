@@ -17,7 +17,7 @@ export const SetGridFilterToReduxFilter = (
   filters: CustomerApiFilterProps,
   currencyColumns: string[]
 ): CustomerApiFilterProps => {
-  gridFilters.map((filter) => {
+  gridFilters.forEach((filter) => {
     filters[filter.columnName] = filter.value;
 
     if (currencyColumns.includes(filter.columnName)) {
@@ -37,15 +37,17 @@ export const SetReduxFilterToGridFilter = (
   const operation = filters.mustSalesBeHigherThanSum
     ? "greaterThan"
     : "lessThanOrEqual";
-  (Object.keys(filters) as Array<keyof CustomerApiFilterProps>).map((key) => {
-    gridFilters.push({
-      columnName: key.toString(),
-      value: filters[key],
-      operation: currencyColumns.includes(key.toString())
-        ? operation
-        : undefined,
-    });
-  });
+  (Object.keys(filters) as Array<keyof CustomerApiFilterProps>).forEach(
+    (key) => {
+      gridFilters.push({
+        columnName: key.toString(),
+        value: filters[key],
+        operation: currencyColumns.includes(key.toString())
+          ? operation
+          : undefined,
+      });
+    }
+  );
 
   return gridFilters;
 };

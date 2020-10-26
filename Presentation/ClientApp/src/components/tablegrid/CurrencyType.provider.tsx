@@ -1,5 +1,5 @@
 import { DataTypeProvider } from "@devexpress/dx-react-grid";
-import React, { useState } from "react";
+import React from "react";
 
 const CurrencyFormatter = ({ value }: any) => (
   <span>

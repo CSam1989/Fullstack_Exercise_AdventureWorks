@@ -2,6 +2,7 @@ import "./Tablegrid.styles.scss";
 
 import {
   CustomPaging,
+  EditingState,
   Filter,
   FilteringState,
   PagingState,
@@ -12,6 +13,8 @@ import {
   Table,
   TableFilterRow,
   TableHeaderRow,
+  TableEditRow,
+  TableEditColumn,
 } from "@devexpress/dx-react-grid-material-ui";
 import React, { useState } from "react";
 
@@ -29,6 +32,9 @@ export interface TablegridProps {
   onPageSizechange(pageSize: number): void;
   filters: Filter[];
   onFiltersChange(event: any): void;
+  isEditable: boolean;
+  commitChanges(event: any): void;
+  getRowId(row: any): number;
 }
 
 const Tablegrid = ({
@@ -41,6 +47,9 @@ const Tablegrid = ({
   onPageSizechange,
   filters,
   onFiltersChange,
+  isEditable,
+  commitChanges,
+  getRowId,
 }: TablegridProps) => {
   const [pageSizes] = useState([50, 100, 250]);
   const [currencyFilterOperations] = useState([
@@ -53,7 +62,13 @@ const Tablegrid = ({
 
   return (
     <div className="table-grid">
-      <Grid rows={rows} columns={columns}>
+      <Grid rows={rows} columns={columns} getRowId={getRowId}>
+        {isEditable ? (
+          <EditingState
+            onCommitChanges={commitChanges}
+            columnExtensions={tableColumnExtensions}
+          />
+        ) : null}
         {currencyColumns ? (
           <CurrencyTypeProvider for={currencyColumns} />
         ) : null}
@@ -78,7 +93,11 @@ const Tablegrid = ({
             tableColumnExtensions ? tableColumnExtensions : null
           }
         />
+
         <TableHeaderRow />
+        {isEditable ? <TableEditRow /> : null}
+        {isEditable ? <TableEditColumn showEditCommand /> : null}
+
         <TableFilterRow showFilterSelector />
         <PagingPanel pageSizes={pageSizes} />
       </Grid>

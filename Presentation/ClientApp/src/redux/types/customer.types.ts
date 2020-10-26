@@ -1,6 +1,6 @@
 import { CustomerList } from "./State";
 import { ICustomer } from "./../../interfaces/Customer";
-import { GET_CUSTOMERS_SUCCESS } from "./action.types";
+import { GET_CUSTOMERS_SUCCESS, PUT_CUSTOMER_SUCCESS } from "./action.types";
 import { ApiStatusActions } from "./apiStatus.types";
 
 export interface IGetCustomersAction {
@@ -8,4 +8,12 @@ export interface IGetCustomersAction {
   payload: CustomerList;
 }
 
-export type CustomerActions = IGetCustomersAction | ApiStatusActions;
+export interface IPutCustomerAction {
+  type: typeof PUT_CUSTOMER_SUCCESS;
+  payload: ICustomer;
+}
+
+export type CustomerActions =
+  | IGetCustomersAction
+  | IPutCustomerAction
+  | ApiStatusActions;

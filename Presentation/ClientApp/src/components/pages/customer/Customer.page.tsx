@@ -1,14 +1,17 @@
-import { Filter } from "@devexpress/dx-react-grid";
+import { ChangeSet, Filter } from "@devexpress/dx-react-grid";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { CustomerApiFilterProps } from "../../../api/customer.api";
-import { customerColumns } from "../../../interfaces/Customer";
+import { customerColumns, ICustomer } from "../../../interfaces/Customer";
 import { IPagination } from "../../../interfaces/Pagination";
 import { logout } from "../../../redux/actions/Auth.actions";
-import { getCustomersAction } from "../../../redux/actions/Customer.actions";
+import {
+  getCustomersAction,
+  updateCustomerAction,
+} from "../../../redux/actions/Customer.actions";
 import { ApplicationState } from "../../../redux/types/State";
 import {
   SetGridFilterToReduxFilter,
@@ -18,11 +21,13 @@ import Tablegrid from "../../tablegrid/Tablegrid.components";
 
 const CustomerPage = () => {
   const [tableColumnExtensions] = useState<any>([
-    { columnName: "sumTotalDue" },
+    { columnName: "sumTotalDue", editingEnabled: false },
   ]);
   const [currencyColumns] = useState(["sumTotalDue"]);
 
-  const { isLoggedIn } = useSelector((state: ApplicationState) => state.auth);
+  const { isLoggedIn, user } = useSelector(
+    (state: ApplicationState) => state.auth
+  );
   const { customers, filters } = useSelector(
     (state: ApplicationState) => state.data
   );
@@ -69,8 +74,28 @@ const CustomerPage = () => {
     );
     dispatchCustomer(filters, customers.pagination);
   };
-
   const gridFilter = SetReduxFilterToGridFilter(filters, currencyColumns);
+
+  const handleOnChange = (props: ChangeSet) => {
+    console.log(props);
+    if (props.changed) {
+      let customer: ICustomer | undefined;
+      let values: any;
+      Object.keys(props.changed).map((key) => {
+        customer = customers.list.find((x) => x.customerId.toString() == key);
+      });
+      Object.values(props.changed).map((value) => (values = value));
+
+      if (customer && values) {
+        const changedCustomer: ICustomer = { ...customer, ...values };
+        try {
+          dispatch(updateCustomerAction(changedCustomer));
+        } catch (error) {
+          toast.error(error.message);
+        }
+      }
+    }
+  };
   return (
     <>
       <h2>Customers</h2>
@@ -84,6 +109,9 @@ const CustomerPage = () => {
         onPageSizechange={handlePageSizeChange}
         filters={gridFilter}
         onFiltersChange={handleFilterChange}
+        isEditable={(user && user.role === "Admin") || false}
+        getRowId={(row: ICustomer) => row.customerId}
+        commitChanges={handleOnChange}
       />
     </>
   );
