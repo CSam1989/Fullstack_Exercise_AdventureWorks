@@ -21,21 +21,23 @@ import React, { useState } from "react";
 import { IPagination } from "../../interfaces/Pagination";
 import { CurrencyTypeProvider } from "./CurrencyType.provider";
 import { FilterProvider } from "./Filter.provider";
+import { BooleanTypeProvider } from "./Boolean.provider";
 
 export interface TablegridProps {
   columns: any[];
   rows: any[];
   tableColumnExtensions?: any;
   currencyColumns?: any;
-  pagination: IPagination;
-  onPagingchange(pageNumber: number): void;
-  onPageSizechange(pageSize: number): void;
-  filters: Filter[];
-  onFiltersChange(event: any): void;
-  isEditable: boolean;
-  commitChanges(event: any): void;
-  getRowId(row: any): number;
-  errors: string[];
+  booleanColumns?: any;
+  pagination?: IPagination;
+  onPagingchange?(pageNumber: number): void;
+  onPageSizechange?(pageSize: number): void;
+  filters?: Filter[];
+  onFiltersChange?(event: any): void;
+  isEditable?: boolean;
+  commitChanges?(event: any): void;
+  getRowId?(row: any): number | string;
+  errors?: string[];
 }
 
 const Tablegrid = ({
@@ -43,6 +45,7 @@ const Tablegrid = ({
   columns,
   tableColumnExtensions,
   currencyColumns,
+  booleanColumns,
   pagination,
   onPagingchange,
   onPageSizechange,
@@ -55,11 +58,9 @@ const Tablegrid = ({
 }: TablegridProps) => {
   const [pageSizes] = useState([50, 100, 250]);
 
-  console.log();
-
   return (
     <div className="table-grid">
-      {errors ? (
+      {errors && errors.length > 0 ? (
         <ul className="errors">
           {errors.map((error, index) => (
             <li key={index}>{error}</li>
@@ -67,35 +68,53 @@ const Tablegrid = ({
         </ul>
       ) : null}
       <Grid rows={rows} columns={columns} getRowId={getRowId}>
-        {isEditable ? (
+        {isEditable && commitChanges ? (
           <EditingState
             onCommitChanges={commitChanges}
             columnExtensions={tableColumnExtensions}
           />
         ) : null}
+
         {currencyColumns ? (
           <CurrencyTypeProvider for={currencyColumns} />
         ) : null}
-        <FilterProvider
-          columns={currencyColumns}
-          filterOperations={["greaterThan", "lessThanOrEqual"]}
-        />
-        <FilterProvider
-          columns={columns.reduce((acc: string[], item: any) => {
-            if (!currencyColumns.includes(item.name))
-              return acc.concat(item.name);
-            return acc;
-          }, [])}
-          filterOperations={[]}
-        />
-        <FilteringState onFiltersChange={onFiltersChange} />
-        <PagingState
-          currentPage={pagination.pageNumber - 1}
-          onCurrentPageChange={onPagingchange}
-          pageSize={pagination.pageSize}
-          onPageSizeChange={onPageSizechange}
-        />
-        <CustomPaging totalCount={pagination.totalCount} />
+
+        {currencyColumns ? (
+          <FilterProvider
+            columns={currencyColumns}
+            filterOperations={["greaterThan", "lessThanOrEqual"]}
+          />
+        ) : null}
+
+        {currencyColumns ? (
+          <FilterProvider
+            columns={columns.reduce((acc: string[], item: any) => {
+              if (!currencyColumns.includes(item.name))
+                return acc.concat(item.name);
+              return acc;
+            }, [])}
+            filterOperations={[]}
+          />
+        ) : null}
+
+        {booleanColumns ? <BooleanTypeProvider for={booleanColumns} /> : null}
+
+        {onFiltersChange ? (
+          <FilteringState onFiltersChange={onFiltersChange} />
+        ) : null}
+
+        {pagination ? (
+          <PagingState
+            currentPage={pagination.pageNumber - 1}
+            onCurrentPageChange={onPagingchange}
+            pageSize={pagination.pageSize}
+            onPageSizeChange={onPageSizechange}
+          />
+        ) : null}
+        {pagination ? (
+          <CustomPaging totalCount={pagination.totalCount} />
+        ) : null}
+
         <Table
           columnExtensions={
             tableColumnExtensions ? tableColumnExtensions : null
@@ -103,11 +122,14 @@ const Tablegrid = ({
         />
 
         <TableHeaderRow />
+
         {isEditable ? <TableEditRow /> : null}
+
         {isEditable ? <TableEditColumn showEditCommand /> : null}
 
-        <TableFilterRow showFilterSelector />
-        <PagingPanel pageSizes={pageSizes} />
+        {filters ? <TableFilterRow showFilterSelector /> : null}
+
+        {pagination ? <PagingPanel pageSizes={pageSizes} /> : null}
       </Grid>
     </div>
   );

@@ -1,5 +1,8 @@
-import { GET_USERS_SUCCESS } from "./../types/action.types";
-import { IGetUsersAction } from "./../types/auth.types";
+import {
+  GET_USERS_SUCCESS,
+  PUT_USERROLE_SUCCESS,
+} from "./../types/action.types";
+import { IGetUsersAction, IPutUserRoleAction } from "./../types/auth.types";
 import { IAdminUser } from "./../../interfaces/AdminUser";
 import { ILogin } from "./../../interfaces/Login";
 import { IUser } from "../../interfaces/User";
@@ -20,6 +23,13 @@ const loginSuccess = (payload: IUser): ILoginAction => {
 const getUsersSucces = (payload: IAdminUser[]): IGetUsersAction => {
   return {
     type: GET_USERS_SUCCESS,
+    payload,
+  };
+};
+
+const PutUserRoleSuccess = (payload: IAdminUser): IPutUserRoleAction => {
+  return {
+    type: PUT_USERROLE_SUCCESS,
     payload,
   };
 };
@@ -53,6 +63,21 @@ export const getUsers = (): AppThunkAction<AuthActions> => {
       dispatch(beginApiCall());
       const usersRespsone = await authService.getUsers();
       dispatch(getUsersSucces(usersRespsone.users));
+    } catch (error) {
+      dispatch(apiCallError());
+      throw error;
+    }
+  };
+};
+
+export const updateUserRoleAction = (
+  user: IAdminUser
+): AppThunkAction<AuthActions> => {
+  return async (dispatch) => {
+    try {
+      dispatch(beginApiCall());
+      await authService.updateUserRole(user);
+      await dispatch(PutUserRoleSuccess(user));
     } catch (error) {
       dispatch(apiCallError());
       throw error;

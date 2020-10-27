@@ -1,6 +1,11 @@
 import { IAdminUser } from "./../../interfaces/AdminUser";
 import { IUser } from "../../interfaces/User";
-import { GET_USERS_SUCCESS, LOGIN_SUCCESS, LOGOUT } from "./action.types";
+import {
+  GET_USERS_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  PUT_USERROLE_SUCCESS,
+} from "./action.types";
 import { ApiStatusActions } from "./apiStatus.types";
 
 export interface ILoginAction {
@@ -17,8 +22,14 @@ export interface IGetUsersAction {
   payload: IAdminUser[];
 }
 
+export interface IPutUserRoleAction {
+  type: typeof PUT_USERROLE_SUCCESS;
+  payload: IAdminUser;
+}
+
 export type AuthActions =
   | ILoginAction
   | ILogoutAction
   | IGetUsersAction
+  | IPutUserRoleAction
   | ApiStatusActions;

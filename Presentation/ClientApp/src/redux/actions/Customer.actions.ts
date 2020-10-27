@@ -49,7 +49,7 @@ export const updateCustomerAction = (
   return async (dispatch) => {
     try {
       dispatch(beginApiCall());
-      const test = await updateCustomer(customer);
+      await updateCustomer(customer);
       await dispatch(PutCustomerSuccess(customer));
     } catch (error) {
       dispatch(apiCallError());

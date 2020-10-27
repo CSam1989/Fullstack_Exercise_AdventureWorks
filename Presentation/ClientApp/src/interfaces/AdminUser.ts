@@ -4,3 +4,9 @@ export interface IAdminUser {
   email: string;
   isAdmin: boolean;
 }
+
+export const UsersColumns = [
+  { name: "username", title: "Username" },
+  { name: "email", title: "Email" },
+  { name: "isAdmin", title: "Admin?" },
+];

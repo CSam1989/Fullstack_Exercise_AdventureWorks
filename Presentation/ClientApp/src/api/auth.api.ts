@@ -19,9 +19,7 @@ const login = async ({ username, password }: ILogin) => {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
     return handleResponses(response);
-  } catch (error) {
-    handleErrors(error);
-  }
+  } catch (error) {}
 };
 
 const logout = () => {
@@ -39,8 +37,22 @@ const getUsers = async () => {
   }
 };
 
+const updateUserRole = async ({ userId, isAdmin }: IAdminUser) => {
+  const httpToken = getHttpWithToken();
+  try {
+    const response: AxiosResponse<IAdminUser> = await httpToken.put(
+      `${Url}/UpdateRole`,
+      { userId, isAdmin }
+    );
+    return handleResponses(response);
+  } catch (error) {
+    handleErrors(error);
+  }
+};
+
 export default {
   login,
   logout,
   getUsers,
+  updateUserRole,
 };

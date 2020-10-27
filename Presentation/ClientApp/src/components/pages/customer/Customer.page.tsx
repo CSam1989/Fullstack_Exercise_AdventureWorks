@@ -1,9 +1,8 @@
 import { ChangeSet, Filter } from "@devexpress/dx-react-grid";
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import { CustomerApiFilterProps } from "../../../api/customer.api";
 import { customerColumns, ICustomer } from "../../../interfaces/Customer";
 import { IPagination } from "../../../interfaces/Pagination";
@@ -76,17 +75,18 @@ const CustomerPage = () => {
   };
   const gridFilter = SetReduxFilterToGridFilter(filters, currencyColumns);
 
-  const handleOnChange = async (props: ChangeSet) => {
-    if (props.changed) {
-      let customer: ICustomer | undefined;
-      let values: any;
-      Object.keys(props.changed).map((key) => {
-        customer = customers.list.find((x) => x.customerId.toString() == key);
-      });
-      Object.values(props.changed).map((value) => (values = value));
+  const handleOnChange = async ({ changed }: ChangeSet) => {
+    if (changed) {
+      const changedRows = customers.list.find(
+        (customer) => changed[customer.customerId]
+      );
 
-      if (customer && values) {
-        const changedCustomer: ICustomer = { ...customer, ...values };
+      if (changedRows) {
+        const changedCustomer: ICustomer = {
+          ...changedRows,
+          ...changed[changedRows.customerId],
+        };
+
         try {
           await dispatch(updateCustomerAction(changedCustomer));
         } catch (error) {
