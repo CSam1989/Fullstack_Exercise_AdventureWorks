@@ -1,26 +1,36 @@
-import { Button, ButtonGroup, TextField } from "@material-ui/core";
+import {
+  Button,
+  ButtonGroup,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+} from "@material-ui/core";
 import { Formik } from "formik";
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
-import { ILogin } from "../../interfaces/Login";
-import { LoginFormValidation } from "./LoginForm.validation";
+import { RouteComponentProps } from "react-router";
+import { IAdminUser } from "../../interfaces/AdminUser";
+import { CreateUserFormValidation } from "./CreateUserForm.validation";
 
-export interface LoginFormProps extends RouteComponentProps<any> {
+export interface CreateUserFormProps extends RouteComponentProps<any> {
   error: string;
-  LoginIn: boolean;
-  handleSubmit(formvalues: ILogin): void;
+  saving: boolean;
+  handleSubmit(formvalues: IAdminUser): void;
 }
 
-const LoginForm = ({
+const CreateUserForm = ({
   error,
-  LoginIn,
+  saving,
   handleSubmit,
   history,
-}: LoginFormProps) => {
-  const initialValues: ILogin = {
+}: CreateUserFormProps) => {
+  const initialValues: IAdminUser = {
+    userId: "",
     username: "",
+    email: "",
     password: "",
+    isAdmin: false,
   };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -28,7 +38,7 @@ const LoginForm = ({
         handleSubmit(values);
         actions.resetForm();
       }}
-      validationSchema={LoginFormValidation}
+      validationSchema={CreateUserFormValidation}
     >
       {({ errors, touched, values, handleChange, handleSubmit }) => (
         <form onSubmit={handleSubmit} className="app-form">
@@ -64,9 +74,34 @@ const LoginForm = ({
               }
             />
           </div>
+          <div>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              className="inputfield"
+              value={values.email}
+              onChange={handleChange}
+              error={!!errors.email && touched.email}
+              helperText={!!errors.email && touched.email && errors.email}
+            />
+          </div>
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.isAdmin}
+                  onChange={handleChange}
+                  name="isAdmin"
+                  color="primary"
+                />
+              }
+              label="Admin?"
+            />
+          </div>
           <ButtonGroup color="primary" fullWidth={true}>
-            <Button type="submit" variant="contained" disabled={LoginIn}>
-              {LoginIn ? "Login In..." : "Login"}
+            <Button type="submit" variant="contained" disabled={saving}>
+              {saving ? "Saving..." : "Save"}
             </Button>
             <Button type="button" onClick={() => history.goBack()}>
               Cancel
@@ -78,4 +113,4 @@ const LoginForm = ({
   );
 };
 
-export default LoginForm;
+export default CreateUserForm;
