@@ -2,6 +2,7 @@ export interface IAdminUser {
   userId: string;
   username: string;
   password?: string;
+  confirmPassword?: string;
   email: string;
   isAdmin: boolean;
 }

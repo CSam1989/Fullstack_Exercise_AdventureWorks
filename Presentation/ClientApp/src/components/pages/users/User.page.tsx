@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 import { IAdminUser, UsersColumns } from "../../../interfaces/AdminUser";
 import {
-  getUsers,
+  getUsersAction,
   updateUserRoleAction,
 } from "../../../redux/actions/Auth.actions";
 import { ApplicationState } from "../../../redux/types/State";
@@ -33,7 +33,7 @@ const UserPage = () => {
 
   const dispatchUsers = async () => {
     try {
-      await dispatch(getUsers());
+      await dispatch(getUsersAction());
     } catch (error) {
       toast.error(error);
     }

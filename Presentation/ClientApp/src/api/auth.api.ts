@@ -8,6 +8,7 @@ import { handleErrors, handleResponses } from "./helpers/api.utils";
 
 export const UserStorage = "user";
 const Url = "Auth";
+const httpToken = getHttpWithToken();
 
 const login = async ({ username, password }: ILogin) => {
   try {
@@ -27,8 +28,6 @@ const logout = () => {
 };
 
 const getUsers = async () => {
-  const httpToken = getHttpWithToken();
-
   try {
     const response: AxiosResponse<IAdminUser[]> = await httpToken.get(Url);
     return handleResponses(response);
@@ -37,8 +36,19 @@ const getUsers = async () => {
   }
 };
 
+const createUser = async (props: IAdminUser) => {
+  try {
+    const response: AxiosResponse<IAdminUser> = await httpToken.post(
+      `${Url}/Create`,
+      { ...props }
+    );
+    handleResponses(response);
+  } catch (error) {
+    handleErrors(error);
+  }
+};
+
 const updateUserRole = async ({ userId, isAdmin }: IAdminUser) => {
-  const httpToken = getHttpWithToken();
   try {
     const response: AxiosResponse<IAdminUser> = await httpToken.put(
       `${Url}/UpdateRole`,
@@ -54,5 +64,6 @@ export default {
   login,
   logout,
   getUsers,
+  createUser,
   updateUserRole,
 };

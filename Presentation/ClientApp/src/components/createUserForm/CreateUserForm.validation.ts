@@ -10,6 +10,13 @@ export const CreateUserFormValidation = Yup.object().shape({
       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,100}$/,
       "At least 1 lowercase, 1 uppercase, 1 number en 1 special character"
     ),
+  confirmPassword: Yup.mixed().test(
+    "match",
+    "Passwords do not match",
+    function () {
+      return this.parent.password === this.parent.confirmPassword;
+    }
+  ),
   email: Yup.string()
     .required("Required")
     .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Must be valid email"),

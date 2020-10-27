@@ -1,5 +1,6 @@
 import {
   GET_USERS_SUCCESS,
+  POST_USER_SUCCESS,
   PUT_USERROLE_SUCCESS,
 } from "./../types/action.types";
 import { LOGIN_SUCCESS, LOGOUT } from "../types/action.types";
@@ -26,6 +27,11 @@ export const authReducer = (state = initialState.auth, action: AuthActions) => {
       return {
         ...state,
         users: action.payload,
+      };
+    case POST_USER_SUCCESS:
+      return {
+        ...state,
+        users: state.users && [...state.users, { ...action.payload }],
       };
     case PUT_USERROLE_SUCCESS:
       return {

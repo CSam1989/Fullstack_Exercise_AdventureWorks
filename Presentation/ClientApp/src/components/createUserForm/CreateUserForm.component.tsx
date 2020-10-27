@@ -28,6 +28,7 @@ const CreateUserForm = ({
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
     isAdmin: false,
   };
 
@@ -36,7 +37,6 @@ const CreateUserForm = ({
       initialValues={initialValues}
       onSubmit={(values, actions) => {
         handleSubmit(values);
-        actions.resetForm();
       }}
       validationSchema={CreateUserFormValidation}
     >
@@ -74,6 +74,23 @@ const CreateUserForm = ({
               }
             />
           </div>
+          <div>
+            <TextField
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              className="inputfield"
+              value={values.confirmPassword}
+              onChange={handleChange}
+              error={!!errors.confirmPassword && touched.confirmPassword}
+              helperText={
+                !!errors.confirmPassword &&
+                touched.confirmPassword &&
+                errors.confirmPassword
+              }
+            />
+          </div>
+
           <div>
             <TextField
               label="Email"
