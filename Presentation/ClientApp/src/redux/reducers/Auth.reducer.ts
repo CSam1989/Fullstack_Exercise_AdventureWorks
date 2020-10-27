@@ -1,3 +1,4 @@
+import { GET_USERS_SUCCESS } from "./../types/action.types";
 import { LOGIN_SUCCESS, LOGOUT } from "../types/action.types";
 import { AuthActions } from "../types/auth.types";
 import initialState from "./initialState";
@@ -17,6 +18,11 @@ export const authReducer = (state = initialState.auth, action: AuthActions) => {
         user: null,
       };
     }
+    case GET_USERS_SUCCESS:
+      return {
+        ...state,
+        users: action.payload,
+      };
     default:
       return state;
   }

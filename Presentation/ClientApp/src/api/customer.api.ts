@@ -33,7 +33,7 @@ export const getCustomers = async (
     );
     return handleResponses(response);
   } catch (error) {
-    return handleErrors(error);
+    handleErrors(error);
   }
 };
 

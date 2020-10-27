@@ -54,13 +54,8 @@ const Tablegrid = ({
   errors,
 }: TablegridProps) => {
   const [pageSizes] = useState([50, 100, 250]);
-  const [currencyFilterOperations] = useState([
-    "greaterThan",
-    "lessThanOrEqual",
-  ]);
 
-  const [otherFilterOperations] = useState([]);
-  const [otherColumns] = useState(["firstName", "lastName", "accountNumber"]);
+  console.log();
 
   return (
     <div className="table-grid">
@@ -83,11 +78,15 @@ const Tablegrid = ({
         ) : null}
         <FilterProvider
           columns={currencyColumns}
-          filterOperations={currencyFilterOperations}
+          filterOperations={["greaterThan", "lessThanOrEqual"]}
         />
         <FilterProvider
-          columns={otherColumns}
-          filterOperations={otherFilterOperations}
+          columns={columns.reduce((acc: string[], item: any) => {
+            if (!currencyColumns.includes(item.name))
+              return acc.concat(item.name);
+            return acc;
+          }, [])}
+          filterOperations={[]}
         />
         <FilteringState onFiltersChange={onFiltersChange} />
         <PagingState

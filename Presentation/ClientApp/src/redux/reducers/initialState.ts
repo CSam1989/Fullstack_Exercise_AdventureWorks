@@ -7,8 +7,9 @@ const initialUserState: UserState = userLocalStorage
   ? {
       isLoggedIn: true,
       user: decodeUserToken(JSON.parse(userLocalStorage).token),
+      users: undefined,
     }
-  : { isLoggedIn: false, user: null };
+  : { isLoggedIn: false, user: null, users: undefined };
 
 const initialCustomerState: CustomerState = {
   customers: {

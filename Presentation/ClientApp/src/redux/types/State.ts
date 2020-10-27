@@ -1,3 +1,4 @@
+import { IAdminUser } from "./../../interfaces/AdminUser";
 import { CustomerApiFilterProps } from "./../../api/customer.api";
 import { IPagination } from "./../../interfaces/Pagination";
 import { ICustomer } from "./../../interfaces/Customer";
@@ -12,6 +13,7 @@ export interface ApplicationState {
 export interface UserState {
   isLoggedIn: boolean;
   user: IUser | null;
+  users: IAdminUser[] | undefined;
 }
 
 export interface CustomerState {

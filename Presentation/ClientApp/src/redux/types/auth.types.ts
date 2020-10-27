@@ -1,5 +1,6 @@
+import { IAdminUser } from "./../../interfaces/AdminUser";
 import { IUser } from "../../interfaces/User";
-import { LOGIN_SUCCESS, LOGOUT } from "./action.types";
+import { GET_USERS_SUCCESS, LOGIN_SUCCESS, LOGOUT } from "./action.types";
 import { ApiStatusActions } from "./apiStatus.types";
 
 export interface ILoginAction {
@@ -11,4 +12,13 @@ export interface ILogoutAction {
   type: typeof LOGOUT;
 }
 
-export type AuthActions = ILoginAction | ILogoutAction | ApiStatusActions;
+export interface IGetUsersAction {
+  type: typeof GET_USERS_SUCCESS;
+  payload: IAdminUser[];
+}
+
+export type AuthActions =
+  | ILoginAction
+  | ILogoutAction
+  | IGetUsersAction
+  | ApiStatusActions;

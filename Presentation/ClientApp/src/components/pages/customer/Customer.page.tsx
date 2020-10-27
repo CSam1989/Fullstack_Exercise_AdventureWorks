@@ -1,5 +1,5 @@
 import { ChangeSet, Filter } from "@devexpress/dx-react-grid";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,12 +20,14 @@ import {
 import Tablegrid from "../../tablegrid/Tablegrid.components";
 
 const CustomerPage = () => {
-  const [errors, setErrors] = useState<string[]>([]);
+  const [currencyColumns] = useState(["sumTotalDue"]);
+
   const [tableColumnExtensions] = useState<any>([
     { columnName: "sumTotalDue", editingEnabled: false },
     { columnName: "accountNumber", editingEnabled: false },
   ]);
-  const [currencyColumns] = useState(["sumTotalDue"]);
+
+  const [errors, setErrors] = useState<string[]>([]);
 
   const { isLoggedIn, user } = useSelector(
     (state: ApplicationState) => state.auth
@@ -35,14 +37,14 @@ const CustomerPage = () => {
   );
   const dispatch = useDispatch();
 
-  const dispatchCustomer = (
+  const dispatchCustomer = async (
     filterProps?: CustomerApiFilterProps,
     paginationProps?: IPagination
   ) => {
     try {
-      dispatch(getCustomersAction(filterProps, paginationProps));
+      await dispatch(getCustomersAction(filterProps, paginationProps));
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
       dispatch(logout());
       return <Redirect to="/" />;
     }
@@ -61,25 +63,20 @@ const CustomerPage = () => {
     });
   };
 
-  const handlePageSizeChange = (pageSize: number) => {
-    dispatchCustomer(filters, {
+  const handlePageSizeChange = async (pageSize: number) => {
+    await dispatchCustomer(filters, {
       ...customers.pagination,
       pageSize: pageSize,
     });
   };
 
-  const handleFilterChange = (gridFilters: Filter[]) => {
-    const newFilters = SetGridFilterToReduxFilter(
-      gridFilters,
-      filters,
-      currencyColumns
-    );
-    dispatchCustomer(filters, customers.pagination);
+  const handleFilterChange = async (gridFilters: Filter[]) => {
+    SetGridFilterToReduxFilter(gridFilters, filters, currencyColumns);
+    await dispatchCustomer(filters, customers.pagination);
   };
   const gridFilter = SetReduxFilterToGridFilter(filters, currencyColumns);
 
   const handleOnChange = async (props: ChangeSet) => {
-    console.log(props);
     if (props.changed) {
       let customer: ICustomer | undefined;
       let values: any;
