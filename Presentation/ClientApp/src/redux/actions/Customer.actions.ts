@@ -50,9 +50,9 @@ export const updateCustomerAction = (
     try {
       dispatch(beginApiCall());
       const test = await updateCustomer(customer);
-      dispatch(PutCustomerSuccess(customer));
-      console.log(test);
+      await dispatch(PutCustomerSuccess(customer));
     } catch (error) {
+      console.log(error);
       dispatch(apiCallError());
       throw error;
     }

@@ -25,7 +25,7 @@ const LoginPage = (props: RouteComponentProps<any>) => {
       props.history.goBack();
     } catch (error) {
       setLoginIn(false);
-      setError(error.message);
+      setError(error);
       toast.error("Login failed", { autoClose: false });
     }
   };

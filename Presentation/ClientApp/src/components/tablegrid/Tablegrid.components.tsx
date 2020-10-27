@@ -35,6 +35,7 @@ export interface TablegridProps {
   isEditable: boolean;
   commitChanges(event: any): void;
   getRowId(row: any): number;
+  errors: string[];
 }
 
 const Tablegrid = ({
@@ -50,6 +51,7 @@ const Tablegrid = ({
   isEditable,
   commitChanges,
   getRowId,
+  errors,
 }: TablegridProps) => {
   const [pageSizes] = useState([50, 100, 250]);
   const [currencyFilterOperations] = useState([
@@ -62,6 +64,13 @@ const Tablegrid = ({
 
   return (
     <div className="table-grid">
+      {errors ? (
+        <ul className="errors">
+          {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      ) : null}
       <Grid rows={rows} columns={columns} getRowId={getRowId}>
         {isEditable ? (
           <EditingState

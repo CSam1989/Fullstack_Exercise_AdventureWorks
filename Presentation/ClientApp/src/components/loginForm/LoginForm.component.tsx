@@ -36,9 +36,7 @@ const LoginForm = ({
           <div>
             {error && (
               <div className="alert-danger" role="alert">
-                {error === "Network Error"
-                  ? "Network Error"
-                  : "Wrong username/password combination"}
+                {error}
               </div>
             )}
             <TextField

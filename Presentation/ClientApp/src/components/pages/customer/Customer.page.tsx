@@ -20,8 +20,10 @@ import {
 import Tablegrid from "../../tablegrid/Tablegrid.components";
 
 const CustomerPage = () => {
+  const [errors, setErrors] = useState<string[]>([]);
   const [tableColumnExtensions] = useState<any>([
     { columnName: "sumTotalDue", editingEnabled: false },
+    { columnName: "accountNumber", editingEnabled: false },
   ]);
   const [currencyColumns] = useState(["sumTotalDue"]);
 
@@ -76,7 +78,7 @@ const CustomerPage = () => {
   };
   const gridFilter = SetReduxFilterToGridFilter(filters, currencyColumns);
 
-  const handleOnChange = (props: ChangeSet) => {
+  const handleOnChange = async (props: ChangeSet) => {
     console.log(props);
     if (props.changed) {
       let customer: ICustomer | undefined;
@@ -89,13 +91,15 @@ const CustomerPage = () => {
       if (customer && values) {
         const changedCustomer: ICustomer = { ...customer, ...values };
         try {
-          dispatch(updateCustomerAction(changedCustomer));
+          await dispatch(updateCustomerAction(changedCustomer));
         } catch (error) {
-          toast.error(error.message);
+          setErrors(error);
+          toast.error("Updating customer failed", { autoClose: false });
         }
       }
     }
   };
+
   return (
     <>
       <h2>Customers</h2>
@@ -112,6 +116,7 @@ const CustomerPage = () => {
         isEditable={(user && user.role === "Admin") || false}
         getRowId={(row: ICustomer) => row.customerId}
         commitChanges={handleOnChange}
+        errors={errors}
       />
     </>
   );
