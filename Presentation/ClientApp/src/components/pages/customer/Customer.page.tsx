@@ -82,6 +82,7 @@ const CustomerPage = () => {
       );
 
       if (changedRows) {
+        setErrors([]);
         const changedCustomer: ICustomer = {
           ...changedRows,
           ...changed[changedRows.customerId],
