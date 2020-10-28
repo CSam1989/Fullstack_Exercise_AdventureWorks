@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common.Interfaces.Identity;
 using Infrastructure.Identity.Commands.CreateAccount;
+using Infrastructure.Identity.Commands.Login;
 using Infrastructure.Identity.Commands.UpdateRole;
 using Infrastructure.Identity.Queries.GetListUsers;
-using Infrastructure.Identity.Queries.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
@@ -17,7 +19,6 @@ namespace Presentation.Controllers
     [Authorize(Roles = "Admin")]
     public class AuthController : BaseController
     {
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -31,9 +32,9 @@ namespace Presentation.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<object>> Login(LoginQuery query)
+        public async Task<ActionResult<object>> Login(LoginCommand command)
         {
-            var token = await Mediator.Send(query);
+            var token = await Mediator.Send(command);
 
             return Ok(new
             {

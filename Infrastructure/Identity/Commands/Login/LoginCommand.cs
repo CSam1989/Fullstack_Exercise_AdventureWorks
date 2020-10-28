@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
-using Application.Common.Interfaces;
 using Application.Common.Interfaces.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Identity.Queries.Login
+namespace Infrastructure.Identity.Commands.Login
 {
-    public class LoginQuery : IRequest<string>
+    public class LoginCommand : IRequest<string>
     {
         public string Username { get; set; }
         public string Password { get; set; }
 
-        public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
+        public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
         {
             private readonly ILoginService _loginService;
             private readonly SignInManager<IdentityUser> _signInManager;
 
-            public LoginQueryHandler(
+            public LoginCommandHandler(
                 SignInManager<IdentityUser> signInManager,
                 ILoginService loginService
             )
@@ -30,7 +26,7 @@ namespace Infrastructure.Identity.Queries.Login
                 _loginService = loginService;
             }
 
-            public async Task<string> Handle(LoginQuery request, CancellationToken cancellationToken)
+            public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
                 var result =
                     await _signInManager.PasswordSignInAsync(request.Username, request.Password, false, false);

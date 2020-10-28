@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Application.Common.Extensions;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Identity;
 using Application.Common.Interfaces.Persistance;
 using FluentValidation.AspNetCore;
 using Infrastructure.Common.Extensions;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Presentation.Common.Middleware;
+using Presentation.Common.Services;
 
 namespace Presentation
 {
@@ -39,6 +41,8 @@ namespace Presentation
             services
                 .AddInfrastructure(Configuration)
                 .AddApplication();
+
+            services.AddTransient<ICurrentUserService, CurrentUserService>();
 
             services.AddSwaggerGen(c =>
             {

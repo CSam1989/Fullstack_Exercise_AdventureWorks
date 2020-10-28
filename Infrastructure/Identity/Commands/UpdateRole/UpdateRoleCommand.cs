@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Identity.Commands.UpdateRole
 {
