@@ -88,7 +88,8 @@ export const createUserAction = (
   return async (dispatch) => {
     try {
       dispatch(beginApiCall());
-      await authService.createUser(user);
+      const userId = await authService.createUser(user);
+      user.userId = userId;
       dispatch(PostUserSuccess(user));
     } catch (error) {
       dispatch(apiCallError());

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Identity.Commands.CreateAccount
 {
-    public class CreateAccountCommand : IRequest
+    public class CreateAccountCommand : IRequest<string>
     {
         public string Email { get; set; }
         public string Username { get; set; }
@@ -19,7 +19,7 @@ namespace Infrastructure.Identity.Commands.CreateAccount
         public string ConfirmPassword { get; set; }
         public bool IsAdmin { get; set; }
 
-        public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand>
+        public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, string>
         {
             private readonly UserManager<IdentityUser> _userManager;
             private readonly IRoleService _roleService;
@@ -33,7 +33,7 @@ namespace Infrastructure.Identity.Commands.CreateAccount
                 _roleService = roleService;
             }
 
-            public async Task<Unit> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
             {
                 //Cant be run in pipeline because asp validation pipeline doesnt run asynchronous
                 if (await CheckIfEmailOrUsernameExists(request.Email, request.Username))
@@ -53,7 +53,7 @@ namespace Infrastructure.Identity.Commands.CreateAccount
                 if (request.IsAdmin)
                     await _roleService.SetAdminRole(user.Id, request.IsAdmin);
 
-                return Unit.Value;
+                return user.Id;
             }
 
             private async Task<bool> CheckIfEmailOrUsernameExists(string email, string username)

@@ -44,7 +44,7 @@ const createUser = async (props: IAdminUser) => {
       `${Url}/Create`,
       { ...props }
     );
-    handleResponses(response);
+    return handleResponses(response);
   } catch (error) {
     handleErrors(error);
   }
