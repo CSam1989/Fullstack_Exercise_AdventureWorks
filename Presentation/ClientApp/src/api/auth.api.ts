@@ -20,7 +20,9 @@ const login = async ({ username, password }: ILogin) => {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
     return handleResponses(response);
-  } catch (error) {}
+  } catch (error) {
+    handleErrors(error);
+  }
 };
 
 const logout = () => {

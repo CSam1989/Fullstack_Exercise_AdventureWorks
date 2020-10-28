@@ -15,7 +15,6 @@ export async function handleResponses(response: AxiosResponse) {
 
 // In a real app, would likely call an error logging service.
 export function handleErrors(error: AxiosError) {
-  console.log(error.response);
   //Bad request
   if (error.response && error.response.status === 400) {
     // bad request messages if not from validation

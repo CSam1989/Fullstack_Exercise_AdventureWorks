@@ -1,12 +1,10 @@
-import { AuthActions } from "./../types/auth.types";
-import { ApiStatusActions } from "./../types/apiStatus.types";
-import { ApplicationState } from "./../types/State";
-import { LOGOUT } from "./../types/action.types";
-import { customerReducer } from "./Customer.reducer";
-import { authReducer } from "./Auth.reducer";
 import { combineReducers } from "redux";
+
+import { LOGOUT } from "./../types/action.types";
+import { ApplicationState } from "./../types/State";
 import apiStatusReducers from "./ApiStatus.reducer";
-import InitialState from "./initialState";
+import { authReducer } from "./Auth.reducer";
+import { customerReducer } from "./Customer.reducer";
 
 const appReducer = combineReducers({
   apiCallsInProgress: apiStatusReducers,
