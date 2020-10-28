@@ -35,6 +35,7 @@ namespace Infrastructure.Identity.Commands.CreateAccount
 
             public async Task<Unit> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
             {
+                //Cant be run in pipeline because asp validation pipeline doesnt run asynchronous
                 if (await CheckIfEmailOrUsernameExists(request.Email, request.Username))
                     throw new BadRequestException("Username and/or email already exists");
 
