@@ -9,6 +9,7 @@ using Infrastructure.Identity.Commands.UpdateRole;
 using Infrastructure.Identity.Queries.GetListUsers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,16 +44,16 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("Create")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> CreateUser(CreateAccountCommand command)
         {
-            await Mediator.Send(command);
+            var userId = await Mediator.Send(command);
 
-            return NoContent();
+            return Created(new Uri(Request.GetEncodedUrl() + "/" + userId), userId);
         }
 
         [HttpPut("UpdateRole")]

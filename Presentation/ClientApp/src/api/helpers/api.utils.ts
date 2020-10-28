@@ -2,6 +2,7 @@ import { AxiosError, AxiosResponse } from "axios";
 
 export async function handleResponses(response: AxiosResponse) {
   if (response.status === 200) return response.data;
+  if (response.status === 201) return response.data;
   if (response.status === 204) return response;
 
   if (response.status === 400) {
