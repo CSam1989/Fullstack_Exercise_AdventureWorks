@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Presentation.Common.Middleware;
-using Presentation.Common.Services;
 
 namespace Presentation
 {
@@ -41,8 +40,6 @@ namespace Presentation
             services
                 .AddInfrastructure(Configuration)
                 .AddApplication();
-
-            services.AddTransient<ICurrentUserService, CurrentUserService>();
 
             services.AddSwaggerGen(c =>
             {
