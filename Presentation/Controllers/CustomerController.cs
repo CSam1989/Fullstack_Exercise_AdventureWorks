@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common.Models;
 using Application.Customers.Commands.Update;
 using Application.Customers.Queries.Get;
 using MediatR;
@@ -19,9 +20,12 @@ namespace Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CustomerVM>> Get()
-        {
-            return  Ok(await Mediator.Send(new GetCustomerQuery()));
+        public async Task<ActionResult<CustomerVM>> Get([FromQuery] CustomerFilterDto customerFilterDetails, [FromQuery] PaginationDto paginationDetails)
+        {return Ok(await Mediator.Send(new GetCustomerQuery()
+            {
+                Pagination = paginationDetails,
+                Filter = customerFilterDetails
+            }));
         }
 
         [Authorize(Roles = "Admin")]

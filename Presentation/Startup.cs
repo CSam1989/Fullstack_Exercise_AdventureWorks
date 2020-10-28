@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Application.Common.Extensions;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Identity;
 using Application.Common.Interfaces.Persistance;
 using FluentValidation.AspNetCore;
 using Infrastructure.Common.Extensions;

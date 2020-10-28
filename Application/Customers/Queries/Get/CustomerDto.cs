@@ -11,6 +11,7 @@ namespace Application.Customers.Queries.Get
         public int CustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string AccountNumber { get; set; }
         public decimal SumTotalDue { get; set; }
 
         public void Mapping(Profile profile)
